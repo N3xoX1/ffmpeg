@@ -1,12 +1,14 @@
 version=7.0.3
 commit=eaddd1d7140bab19e5a4403d3c0f61fe5f59cb75
 platform=macos-arm64
-sdk_version=26.5
+sdk_version=27.0
 deployment_target=11.0
-configure_flags=static,no-shared,pic,disable-everything,no-avdevice,no-avformat,no-swresample,no-programs,no-network,no-autodetect,decoders:h264/hevc/vp8/vp9,filter:yadif,builtin-filters:buffer/buffersink
+configure_flags=static,no-shared,pic,disable-everything,no-avdevice,no-avformat,no-swresample,no-programs,no-network,no-autodetect,decoders:h264/hevc/vp8/vp9,filter:yadif,builtin-filters:buffer/buffersink,videotoolbox,hwaccels:h264/hevc/vp9_videotoolbox
 libraries=libavcodec.a,libavfilter.a,libavutil.a,libswscale.a
 decoders=h264,hevc,vp8,vp9
 filters=buffer,buffersink,yadif
+hwaccels=h264_videotoolbox,hevc_videotoolbox,vp9_videotoolbox
+frameworks=CoreFoundation,CoreMedia,CoreVideo,VideoToolbox
 filter_selection=yadif;buffer_and_buffersink_are_builtin
 shared=disabled
 autodetect=disabled

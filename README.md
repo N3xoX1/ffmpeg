@@ -45,7 +45,11 @@ The script writes these files to `lib/macos-arm64/`:
 - `BUILDINFO.txt`
 
 The macOS build is intentionally minimal: static ARM64 libraries with the
-H.264, HEVC, VP8 and VP9 decoders, the `yadif` filter, and swscale. Automatic
+H.264, HEVC, VP8 and VP9 decoders, the `yadif` filter, and swscale.
+VideoToolbox is enabled explicitly for H.264, HEVC and VP9; unsupported
+streams retain software decoding. CMake links the CoreFoundation, CoreMedia,
+CoreVideo and VideoToolbox frameworks. The rebuild checks that the requested
+hardware accelerators were enabled before installing the archives. Automatic
 external-library detection is disabled so a rebuild cannot silently acquire
 Homebrew or MacPorts dependencies.
 
