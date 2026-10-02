@@ -51,7 +51,7 @@ if [[ "$ACTUAL_COMMIT" != "$FFMPEG_COMMIT" ]]; then
 fi
 
 COMMON_FLAGS="-arch arm64 -isysroot $SDKROOT -mmacosx-version-min=$DEPLOYMENT_TARGET"
-CONFIGURE_FLAGS="static,no-shared,pic,disable-everything,no-avdevice,no-avformat,no-swresample,no-programs,no-network,no-autodetect,decoders:h264/hevc/vp8/vp9,filter:yadif,builtin-filters:buffer/buffersink,videotoolbox,hwaccels:h264/hevc/vp9_videotoolbox"
+CONFIGURE_FLAGS="static,no-shared,pic,disable-everything,no-avdevice,no-avformat,no-swresample,no-programs,no-network,no-autodetect,decoders:h264/hevc/vp8/vp9,filter:yadif,builtin-filters:buffer/buffersink,videotoolbox,hwaccels:h264/vp9_videotoolbox"
 
 # Avoid accidental linkage against Homebrew/MacPorts libraries. Everything NXEmu
 # needs here is implemented inside FFmpeg or the macOS SDK.
@@ -88,7 +88,6 @@ pushd "$SOURCE_DIR" >/dev/null
     --enable-pthreads \
     --enable-videotoolbox \
     --enable-hwaccel=h264_videotoolbox \
-    --enable-hwaccel=hevc_videotoolbox \
     --enable-hwaccel=vp9_videotoolbox \
     --enable-decoder=h264 \
     --enable-decoder=hevc \
@@ -100,7 +99,7 @@ pushd "$SOURCE_DIR" >/dev/null
     --extra-cflags="$COMMON_FLAGS" \
     --extra-ldflags="$COMMON_FLAGS"
 
-for component in VIDEOTOOLBOX H264_VIDEOTOOLBOX_HWACCEL HEVC_VIDEOTOOLBOX_HWACCEL VP9_VIDEOTOOLBOX_HWACCEL; do
+for component in VIDEOTOOLBOX H264_VIDEOTOOLBOX_HWACCEL VP9_VIDEOTOOLBOX_HWACCEL; do
     if ! grep -q "^#define CONFIG_${component} 1$" config.h config_components.h; then
         echo "error: FFmpeg configured without ${component}" >&2
         exit 1
@@ -141,7 +140,7 @@ configure_flags=$CONFIGURE_FLAGS
 libraries=libavcodec.a,libavfilter.a,libavutil.a,libswscale.a
 decoders=h264,hevc,vp8,vp9
 filters=buffer,buffersink,yadif
-hwaccels=h264_videotoolbox,hevc_videotoolbox,vp9_videotoolbox
+hwaccels=h264_videotoolbox,vp9_videotoolbox
 frameworks=CoreFoundation,CoreMedia,CoreVideo,VideoToolbox
 filter_selection=yadif;buffer_and_buffersink_are_builtin
 shared=disabled
